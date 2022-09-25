@@ -1,2 +1,2 @@
-conda create -n ai4im -c conda-forge python jupyterlab numpy scipy theme-darcula jupyterlab_vim jupyterlab-lsp python-lsp-server pandas
+conda create -n ai4im -c conda-forge python jupyterlab numpy scipy theme-darcula jupyterlab_vim jupyterlab-lsp python-lsp-server matplotlib pandas
 pip install changefinder

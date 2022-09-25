@@ -1,4 +1,0 @@
-name: ai4aim
-channels:
-  - defaults
-prefix: /home/alfredo/.config/miniconda3/envs/ai4aim

@@ -8,7 +8,7 @@ This is a helper file for the 2022-2023 Project of AI Applications
 It contains the following functions:
     read_input_data(dir)
         - input: directory of the data files (csv). 
-        default = current directory + \Data
+        default = current directory + /Data
         - output: dictionary of data lists. E.g. "screw_volume" is a list with 
         N elements where each element is a list containing the values for the 
         screw volume over time. "times" is a list with N elements
@@ -17,7 +17,7 @@ It contains the following functions:
     
     read_test_data(dir)
         - input: directory of the data files (csv). 
-        default = current directory + \Data
+        default = current directory + /Data
         - output: dictionary of data lists of the independent test set
         
     read_Y(fid)
@@ -44,11 +44,11 @@ from scipy.stats import skew, kurtosis
 import changefinder
 
 
-def read_input_data(dir=os.getcwd()+"\Data"):
+def read_input_data(dir=os.getcwd()+"/Data"):
     input_data=dict()
     
     times=list()
-    with open(dir+'\\times.csv','r') as read_obj:
+    with open(dir+'/times.csv','r') as read_obj:
         csv_reader = reader(read_obj)
         for row in csv_reader:
             row=[float(i) for i in row]
@@ -56,7 +56,7 @@ def read_input_data(dir=os.getcwd()+"\Data"):
     input_data["times"]=times
             
     screw_volume=list()
-    with open(dir+'\\screw_volume.csv','r') as read_obj:
+    with open(dir+'/screw_volume.csv','r') as read_obj:
         csv_reader = reader(read_obj)
         for row in csv_reader:
             row=[float(i) for i in row]
@@ -64,7 +64,7 @@ def read_input_data(dir=os.getcwd()+"\Data"):
     input_data["screw_volume"]=screw_volume
     
     injection_pressure=list()
-    with open(dir+'\\injection_pressure.csv','r') as read_obj:
+    with open(dir+'/injection_pressure.csv','r') as read_obj:
         csv_reader = reader(read_obj)
         for row in csv_reader:
             row=[float(i) for i in row]
@@ -72,7 +72,7 @@ def read_input_data(dir=os.getcwd()+"\Data"):
     input_data["injection_pressure"]=injection_pressure
             
     injection_flow=list()
-    with open(dir+'\\injection_flow.csv','r') as read_obj:
+    with open(dir+'/injection_flow.csv','r') as read_obj:
         csv_reader = reader(read_obj)
         for row in csv_reader:
             row=[float(i) for i in row]
@@ -80,7 +80,7 @@ def read_input_data(dir=os.getcwd()+"\Data"):
     input_data["injection_flow"]=injection_flow
     
     temperature_cavity_in=list()
-    with open(dir+'\\temperature_cavity_in.csv','r') as read_obj:
+    with open(dir+'/temperature_cavity_in.csv','r') as read_obj:
         csv_reader = reader(read_obj)
         for row in csv_reader:
             row=[float(i) for i in row]
@@ -88,7 +88,7 @@ def read_input_data(dir=os.getcwd()+"\Data"):
     input_data["temperature_cavity_in"]=temperature_cavity_in
             
     temperature_cavity_out=list()
-    with open(dir+'\\temperature_cavity_out.csv','r') as read_obj:
+    with open(dir+'/temperature_cavity_out.csv','r') as read_obj:
         csv_reader = reader(read_obj)
         for row in csv_reader:
             row=[float(i) for i in row]
@@ -96,7 +96,7 @@ def read_input_data(dir=os.getcwd()+"\Data"):
     input_data["temperature_cavity_out"]=temperature_cavity_out
     
     temperature_cavity_end=list()
-    with open(dir+'\\temperature_cavity_end.csv','r') as read_obj:
+    with open(dir+'/temperature_cavity_end.csv','r') as read_obj:
         csv_reader = reader(read_obj)
         for row in csv_reader:
             row=[float(i) for i in row]
@@ -104,7 +104,7 @@ def read_input_data(dir=os.getcwd()+"\Data"):
     input_data["temperature_cavity_end"]=temperature_cavity_end
     
     cavity_pressure=list()
-    with open(dir+'\\cavity_pressure.csv','r') as read_obj:
+    with open(dir+'/cavity_pressure.csv','r') as read_obj:
         csv_reader = reader(read_obj)
         for row in csv_reader:
             row=[float(i) for i in row]
@@ -114,11 +114,11 @@ def read_input_data(dir=os.getcwd()+"\Data"):
             
     return input_data
 
-def read_test_data(dir=os.getcwd()+"\Data"):
+def read_test_data(dir=os.getcwd()+"/Data"):
     test_data=dict()
     
     times=list()
-    with open(dir+'\\test_times.csv','r') as read_obj:
+    with open(dir+'/test_times.csv','r') as read_obj:
         csv_reader = reader(read_obj)
         for row in csv_reader:
             row=[float(i) for i in row]
@@ -126,7 +126,7 @@ def read_test_data(dir=os.getcwd()+"\Data"):
     test_data["times"]=times
             
     screw_volume=list()
-    with open(dir+'\\test_screw_volume.csv','r') as read_obj:
+    with open(dir+'/test_screw_volume.csv','r') as read_obj:
         csv_reader = reader(read_obj)
         for row in csv_reader:
             row=[float(i) for i in row]
@@ -134,7 +134,7 @@ def read_test_data(dir=os.getcwd()+"\Data"):
     test_data["screw_volume"]=screw_volume
     
     injection_pressure=list()
-    with open(dir+'\\test_injection_pressure.csv','r') as read_obj:
+    with open(dir+'/test_injection_pressure.csv','r') as read_obj:
         csv_reader = reader(read_obj)
         for row in csv_reader:
             row=[float(i) for i in row]
@@ -142,7 +142,7 @@ def read_test_data(dir=os.getcwd()+"\Data"):
     test_data["injection_pressure"]=injection_pressure
             
     injection_flow=list()
-    with open(dir+'\\test_injection_flow.csv','r') as read_obj:
+    with open(dir+'/test_injection_flow.csv','r') as read_obj:
         csv_reader = reader(read_obj)
         for row in csv_reader:
             row=[float(i) for i in row]
@@ -150,7 +150,7 @@ def read_test_data(dir=os.getcwd()+"\Data"):
     test_data["injection_flow"]=injection_flow
     
     temperature_cavity_in=list()
-    with open(dir+'\\test_temperature_cavity_in.csv','r') as read_obj:
+    with open(dir+'/test_temperature_cavity_in.csv','r') as read_obj:
         csv_reader = reader(read_obj)
         for row in csv_reader:
             row=[float(i) for i in row]
@@ -158,7 +158,7 @@ def read_test_data(dir=os.getcwd()+"\Data"):
     test_data["temperature_cavity_in"]=temperature_cavity_in
             
     temperature_cavity_out=list()
-    with open(dir+'\\test_temperature_cavity_out.csv','r') as read_obj:
+    with open(dir+'/test_temperature_cavity_out.csv','r') as read_obj:
         csv_reader = reader(read_obj)
         for row in csv_reader:
             row=[float(i) for i in row]
@@ -166,7 +166,7 @@ def read_test_data(dir=os.getcwd()+"\Data"):
     test_data["temperature_cavity_out"]=temperature_cavity_out
     
     temperature_cavity_end=list()
-    with open(dir+'\\test_temperature_cavity_end.csv','r') as read_obj:
+    with open(dir+'/test_temperature_cavity_end.csv','r') as read_obj:
         csv_reader = reader(read_obj)
         for row in csv_reader:
             row=[float(i) for i in row]
@@ -174,7 +174,7 @@ def read_test_data(dir=os.getcwd()+"\Data"):
     test_data["temperature_cavity_end"]=temperature_cavity_end
     
     cavity_pressure=list()
-    with open(dir+'\\test_cavity_pressure.csv','r') as read_obj:
+    with open(dir+'/test_cavity_pressure.csv','r') as read_obj:
         csv_reader = reader(read_obj)
         for row in csv_reader:
             row=[float(i) for i in row]
@@ -278,5 +278,5 @@ def time_series2features(values_list,time_values_list):
 
 #input_data=read_input_data()
 #test_data=read_test_data()
-#Y=read_Y(os.getcwd()+"\Data\Y1.csv")
+#Y=read_Y(os.getcwd()+"/Data/Y1.csv")
 #features1=time_series2features(input_data["ramposition"], input_data["ramposition_time"])

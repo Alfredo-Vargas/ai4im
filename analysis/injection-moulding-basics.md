@@ -89,3 +89,4 @@ digraph {
 1. Determine goals, metrics and target value for the metric
 2. Establish a working end-to-end pipeline asap
 3. Determine bottlenecks in performance & diagnose. Repeatedly make incremental changes based on specific findings.
+

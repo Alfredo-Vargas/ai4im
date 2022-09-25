@@ -278,5 +278,5 @@ def time_series2features(values_list,time_values_list):
 
 #input_data=read_input_data()
 #test_data=read_test_data()
-#Y=read_Y(os.getcwd()+"/Data/Y1.csv")
+#Y=read_Y(os.getcwd()+"\Data\Y1.csv")
 #features1=time_series2features(input_data["ramposition"], input_data["ramposition_time"])

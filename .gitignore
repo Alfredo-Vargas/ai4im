@@ -1,3 +1,6 @@
 **/Data/**
 **/.virtual_documents/**
 **/.ipynb_checkpoints/**
+**/__pycache__/**
+__pycache__/Helper.cpython-310.pyc
+*.pyc

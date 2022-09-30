@@ -168,16 +168,20 @@ def time_series2features(values_list,time_values_list):
         values=values_list[k]
         time_values=time_values_list[k]
         
-        #trim approx 0
+        # trim approx 0
+        # this filters only the relevant values where the information for learning happens
         trim_value=0.00001
         values_trimmed=[v for v in values if v>trim_value]
         times_trimmed=[time_values[i] for i in range(len(time_values)) if values[i]>trim_value]
         
         #cycletime
-        ct=times_trimmed[-1]
+        ct=times_trimmed[-1]  # last point in time
         input_matrix[k,0]=ct
         
         # peaks - values, positions, widths at half prominence, prominences (height peak)
+        # scipy.signal.find_peaks (see online documentation)
+        # it takes a 1-D array and finds all local maxima, 
+        # prominence takes y-variation into consideration and width the x-variation for the peaks
         peaks_info=signal.find_peaks(values_trimmed, prominence=0.01, width=0.01,rel_height=0.5)
         if len(peaks_info[0])>0:
             peak_value=values_trimmed[peaks_info[0][0]]

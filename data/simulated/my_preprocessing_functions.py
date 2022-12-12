@@ -1,4 +1,5 @@
 import pandas as pd
+from numpy import count_nonzero
 from imblearn.over_sampling import SMOTE
 
 """
@@ -29,8 +30,10 @@ def balance(df: pd.DataFrame, sr: pd.Series) -> tuple:
     return (resampled_features, resampled_labels)
 
 
-def check_imbalance(label: pd.Sereis) -> None:
+def check_imbalance(label: pd.Series) -> None:
 
-        pv = np.count_nonzero(label) / len(label) * 100
-    print(f"The imbalance profile has:\n {pv:.2f}% of valid products and \
-        \n {100 - pv:.2f}% of invalid products")
+    pv = count_nonzero(label) / len(label) * 100
+    print(
+        f"The imbalance profile has:\n {pv:.2f}% of valid products and \
+    \n {100 - pv:.2f}% of invalid products"
+    )

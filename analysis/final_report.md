@@ -43,7 +43,16 @@
     - The number of not valid bins is $462$ which correspond to the $29.96$ %
 
 #### Goal:
+
+- Selecting the metric:
+
+    - It is important to note that in a time series problem the mean accuracy cannot be considered as a good indicator for the performance. The reason for this is that the datapoins are time correlated and are therefore not independent from each other. However, after feature engineering which allows to represent the time series problem as a classification problem with tabular data, then we at this point can consider the mean accuracy as good indicator for the performance of the algorithm **ONLY** when we have a balanced dataset!. We address this imbalance issue by incrementing the minority class and using the **f1 score** to estimate better the true positives, true negatives, false positives and false negatives.
+
 - Get at least a performance of 80% for the f1-score for both the majority class (valid bins) and minority class (not valid bins).
+
+- From the economical point of view of a molding injection process, not detecting the faulty pieces (**false positives**) is the one that have the most negatively impact, _both economically and to the environment_:
+    - Economically, because we are not able to efficiently use the material and resources that require to follow the quality standard of the bins. This is a condition before one is able to commercialize any product.
+    - Environmentally, because we waste `plastic` material whose usage we are already trying to minimize.
 
 ### Data preprocessing & Feature engineering
 
@@ -80,20 +89,33 @@ full_data_df.head()
 
 #### Data splits, tried the following:
 
-1. Split 80% for train and 20% for test, validation not included as Random Forest incorporates validation given by the number of estimators (number of trees).
+1. Split 80% for train and 20% for test. A sort of training \"cross-validation\" can be considered intrinsically incorporated when using Random Forest with a number of estimator larger than one (the default is $100$). To split the data we used:
 
-2. $p-value$ tunned to determine how many features must be kept in order to obtain the best results (f1 scores).
+```python
+from sklearn.model_selection import train_test_split
+```
+
+2. $p-value$ tuning to determine how many features must be kept in order to obtain the best results (**f1 scores**).
 
 3. TODO: explore validation splits when using other ML methods.
 
-### Methods
+
+### Selecting the Machine Learning Model
+
+#### Methods
+
+-  Because were dealing with a classification problem but not a regression, we need to consider models that allows to classify.
+- Let's start with:
+    1. Decision trees & Ensembles (specifically RandomForest)
+    2. kNN
+    3. Neural Networks
 
 1. Random Forest Classifier
 
-2. Neural Networks
+3. kNN
     - TODO
 
-3. SVM
+3. Neural Networks
     - TODO
 
 ### Results
@@ -106,9 +128,26 @@ full_data_df.head()
 
 ### Conclusions
 
+#### Data Exploration and Pre Analysis
+
+- From the figures, we observe that potentially one has the opportunity to differentiate the bin classes valid and not valid by using the `Helper.py` module and feature enginnered dataset.
+- From the new engineered dataset we observer that we will require some preprocessing. More specifically we will create in what follows a pipeline that will perform the following:
+    - Standarization
+    - Removal of NaN values
+    - Address of Imbalance Issue (here we will use the `imblearn.over_sampling` and from it the `SMOTE` function):
+    ```python
+    from imblearn.over_sampling import SMOTE
+    ```
+
 - So far we have a good `f1-score` for both the minority and majority classes with values above $80$%.
 - We can clearly identified two regions when feature engineering one related to the under fitting region when `p-values` when using the `tfresh`. One region corresponds to the under-fitting region ($p-value < 0.48$), meaning we have less features (52% or more are considered rare features and therefore ignored). The other region corresponds to the over-fitting region with $p-value > 0.48$ (52% or less are considered rare features and therefore ignored.)
+
 - TODO:
-    - Explore cross validation with other ML methods.
+    - Explore cross validation with other ML methods (RandomForest GridSearch already implements this with cv=None which means 5-fold cv)
     - Obtain optimal `p-values` when using other ML methods.
     - Explore **both** strategy for data augmentation when using the `tsfresh` library. So far we have used only the `minority` strategy for data augmentation.
+
+### Bibliography
+
+- Oversampling technique `SMOTE` original paper:
+    - https://arxiv.org/abs/1106.1813

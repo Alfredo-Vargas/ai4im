@@ -127,11 +127,11 @@ from sklearn.model_selection import train_test_split
 | Metric \ Model    | Random forest from Helper FE   | Random forest from tsfresh FE (pv=0.68)    | KNN from tsfresh    | NN from tsfresh   |
 |---------------- | --------------- | --------------- | --------------- | --------------- |
 | Precision for not valid class    | 0.79    | 0.84    | Item4.1    | Item5.1   |
-| Precision for the valid class   | 0.81   | 0.82   | Item4.2   | Item5.2   |
-| Recall valid for not valid class    | 0.81    | 0.81    | Item4.1    | Item5.1   |
-| Recall for the valid class   | 0.79   | 0.84   | Item4.2   | Item5.2   |
-| F1-score for not valid class    | 0.80    | 0.82    | Item4.1    | Item5.1   |
-| F1-score for the valid class   | 0.80   | 0.83   | Item4.2   | Item5.2   |
+| Precision for the valid class   | 0.81   | 0.89   | Item4.2   | Item5.2   |
+| Recall valid for not valid class    | 0.87    | 0.81    | Item4.1    | Item5.1   |
+| Recall for the valid class   | 0.79   | 0.86   | Item4.2   | Item5.2   |
+| F1-score for not valid class    | 0.80    | 0.86    | Item4.1    | Item5.1   |
+| F1-score for the valid class   | 0.80   | 0.87   | Item4.2   | Item5.2   |
 
 
 ### Conclusions

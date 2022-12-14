@@ -150,6 +150,12 @@ from sklearn.model_selection import train_test_split
 - So far we have a good `f1-score` for both the minority and majority classes with values above $80$%.
 - We can clearly identified two regions when feature engineering one related to the under fitting region when `p-values` when using the `tfresh`. One region corresponds to the under-fitting region ($p-value < 0.48$), meaning we have less features (52% or more are considered rare features and therefore ignored). The other region corresponds to the over-fitting region with $p-value > 0.48$ (52% or less are considered rare features and therefore ignored.)
 
+#### Explainability
+
+- During the feature engineering process `p-value` tuning allows to detect high correlated features in a dataset. If one selects purposely a dataset with the lower p-value and higher performance, one can more easily extract insights that could become relevant for the manufacturing process of the bins in question or the injection moulding in question.
+
+- The dataset with `p-value=0.01` has the lowest amount of features and quite high precision (above $80%$). Those features include mostly some Fourier transform coefficients, among others parameters. Meaning that highly localized points in the configuration space of the features are the most relevant to make the distinction between a valid and not valid classes. Tracking those parameters could also give insight of what features are the most important when engineering the studied bins.
+
 - TODO:
     - Obtain optimal `p-values` when using other ML methods.
 

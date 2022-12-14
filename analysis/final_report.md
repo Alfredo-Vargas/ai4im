@@ -120,10 +120,18 @@ from sklearn.model_selection import train_test_split
 
 ### Results
 
-1. Random Forest:
-    - **p-value threshold** for feature selection when using `tsfresh` was chosen by optimizing the `f1score` of both minority and majority classes when using the defaults parameters of Random Forest classifier provided by `scikit-learn`. The optimal `p-value` found has a value of $0.48$. See figure below:
+### Performance Table
 
 ![optimal pvalue for random forest classifier](./images/optimal_pvalue_rfc.png)
+
+| Metric \ Model    | Random forest from Helper FE   | Random forest from tsfresh FE (pv=0.68)    | KNN from tsfresh    | NN from tsfresh   |
+|---------------- | --------------- | --------------- | --------------- | --------------- |
+| Precision for not valid class    | 0.79    | 0.84    | Item4.1    | Item5.1   |
+| Precision for the valid class   | 0.81   | 0.82   | Item4.2   | Item5.2   |
+| Recall valid for not valid class    | 0.81    | 0.81    | Item4.1    | Item5.1   |
+| Recall for the valid class   | 0.79   | 0.84   | Item4.2   | Item5.2   |
+| F1-score for not valid class    | 0.80    | 0.82    | Item4.1    | Item5.1   |
+| F1-score for the valid class   | 0.80   | 0.83   | Item4.2   | Item5.2   |
 
 
 ### Conclusions
@@ -143,9 +151,9 @@ from sklearn.model_selection import train_test_split
 - We can clearly identified two regions when feature engineering one related to the under fitting region when `p-values` when using the `tfresh`. One region corresponds to the under-fitting region ($p-value < 0.48$), meaning we have less features (52% or more are considered rare features and therefore ignored). The other region corresponds to the over-fitting region with $p-value > 0.48$ (52% or less are considered rare features and therefore ignored.)
 
 - TODO:
-    - Explore cross validation with other ML methods (RandomForest GridSearch already implements this with cv=None which means 5-fold cv)
     - Obtain optimal `p-values` when using other ML methods.
-    - Explore **both** strategy for data augmentation when using the `tsfresh` library. So far we have used only the `minority` strategy for data augmentation.
+
+
 
 ### Bibliography
 

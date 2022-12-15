@@ -1,4 +1,4 @@
-# Partial Report project AI Applications: AI4IM (simulated data Y2 labels)
+# Final Report project AI Applications: AI4IM (simulated data Y2 labels)
 
 ###### Student: Alfredo Vargas
 ###### R-number: r0835034
@@ -69,7 +69,7 @@
 
 #### Data cleaning steps:
 
-- Many of the engineered features have $0$ constant values which after normalization become`NaN` values which are dropped.
+- Some small features are trimmed whenever their values are smaller than the trim value limit $\epsilon=0.00001$ (trim value)
 - Some features have a constant value which can be dropped as they not contribute when one deals with some ML methods such a decision trees. However, we could keep it for its use when using other ML methods.
 - To drop the features we use:
 
@@ -99,7 +99,7 @@ from sklearn.model_selection import train_test_split
 
 2. $p-value$ tuning to determine how many features must be kept in order to obtain the best results (**f1 scores**).
 
-3. TODO: explore validation splits when using other ML methods.
+3. All data splits used the `random_state=0`. So one can easily reproduce and compare the performance between algorithms.
 
 
 ### Selecting the Machine Learning Model
@@ -114,42 +114,62 @@ from sklearn.model_selection import train_test_split
 
 1. Random Forest Classifier
 
-3. kNN
-    - TODO
 
-3. Neural Networks
-    - TODO
+    1.1 With Helper
+
+    - f1 score of minority and majority classes is 0.80
+
+    1.2 With Tsfresh
+
+    ![optimal pvalue for random forest classifier](./images/optimal_pvalue_rfc.png)
+
+    - f1 score of minority and majority classes is 0.86 and 0.87
+
+2. kNN
+
+    - Optimal number of neighbors: $29$
+    - f1 score of minority and majority classes is 0.72 and 0.80
+
+3. Multi-layer Perceptron Classifier
+
+    3.1 Number of features filtered:
+    - The datasets with pv=0.01 had f1 score for the minority and majority clases of: 0.68 and 0.47
+    - The datasets with pv=0.06 had f1 score for the minority and majority clases of: 0.69 and 0.78
+    - The datasets with pv=0.1 had f1 score for the minority and majority clases of: 0.69 and 0.68
+    - The datasets with pv=0.15 had f1 score for the minority and majority clases of: 0.70 and 0.75
+    - The datasets with pv=0.2 had f1 score for the minority and majority clases of: -- and -- (crashes whenever we reproduce this step)
+    - The datasets with pv=0.24 had f1 score for the minority and majority clases of: 0.70 and 0.78
+
+- Higher values of pv are still needed to be explored. However the f1 score not seems to improve that much for the minority class, so we will pick pv = 0.06 as our starting dataset.
 
 ### Results
 
 ### Performance Table
 
-![optimal pvalue for random forest classifier](./images/optimal_pvalue_rfc.png)
 
-| Metric \ Model    | Random forest from Helper FE   | Random forest from tsfresh FE (pv=0.68)    | KNN from tsfresh    | NN from tsfresh   |
+| Metric \ Model    | Random forest from Helper FE   | Random forest from tsfresh FE (pv=0.68)    | KNN from tsfresh    | MLPC from tsfresh   |
 |---------------- | --------------- | --------------- | --------------- | --------------- |
-| Precision for not valid class    | 0.79    | 0.84    | 0.74    | Item5.1   |
-| Precision for the valid class   | 0.81   | 0.89   | 0.81   | Item5.2   |
-| Recall valid for not valid class    | 0.87    | 0.81    | 0.64    | Item5.1   |
-| Recall for the valid class   | 0.79   | 0.86   | 0.88   | Item5.2   |
-| F1-score for not valid class    | 0.80    | 0.86    | 0.72    | Item5.1   |
-| F1-score for the valid class   | 0.80   | 0.87   | 0.80   | Item5.2   |
+| Precision for not valid class    | 0.79    | 0.84    | 0.74    | 0.78   |
+| Precision for the valid class   | 0.81   | 0.89   | 0.81   | 0.72   |
+| Recall valid for not valid class    | 0.87    | 0.81    | 0.64    | 0.61   |
+| Recall for the valid class   | 0.79   | 0.86   | 0.88   | 0.85   |
+| F1-score for not valid class    | 0.80    | 0.86    | 0.72    | 0.69   |
+| F1-score for the valid class   | 0.80   | 0.87   | 0.80   | 0.78   |
 
 
 ### Conclusions
 
 #### Data Exploration and Pre Analysis
 
-- From the figures, we observe that potentially one has the opportunity to differentiate the bin classes valid and not valid by using the `Helper.py` module and feature enginnered dataset.
+- From the figures, we observe that potentially one has the opportunity to differentiate the bin classes valid and not valid by using the `Helper.py` module and its corresponding feature engineered dataset.
 - From the new engineered dataset we observer that we will require some preprocessing. More specifically we will create in what follows a pipeline that will perform the following:
     - Standarization
     - Removal of NaN values
-    - Address of Imbalance Issue (here we will use the `imblearn.over_sampling` and from it the `SMOTE` function):
+    - Balancing of the dataset (here we will use the `imblearn.over_sampling` and from it the `SMOTE` function):
     ```python
     from imblearn.over_sampling import SMOTE
     ```
 
-- So far we have a good `f1-score` for both the minority and majority classes with values above $80$%.
 - We can clearly identified two regions when feature engineering one related to the under fitting region when `p-values` when using the `tfresh`. One region corresponds to the under-fitting region ($p-value < 0.48$), meaning we have less features (52% or more are considered rare features and therefore ignored). The other region corresponds to the over-fitting region with $p-value > 0.48$ (52% or less are considered rare features and therefore ignored.)
 
 #### Avoiding Overfitting
@@ -167,15 +187,24 @@ from sklearn.model_selection import train_test_split
 #### Reproducibility
 
 - Whenever we split the data between training and test we used a `random_state=0`.
-- For the `RandomForestClassifier` we used `random_state=123`, whenever bootstrapping was involved.
+- For the `RandomForestClassifier` and `MLPClassifier` we used `random_state=123`, whenever bootstrapping was involved in **Random Forest** or for the generation of the initial weights and bias for the **Multi-layer Perceptron Classifier**.
 - The balancing of the data using the `SMOTE` library also required some `random_state`. We avoided this issue by saving the datasets after balancing them and the using those for training.
-- To create the conda environment used for this case use:
+- To create the `conda` environment used to run the present notebooks, use:
 
 ```bash
 conda env create --file ai4im.yml
 ```
 
+- The github repo with all notebooks and relevant files are in the following repo:
+    - https://github.com/Alfredo-Vargas/ai4im
+
 ### Bibliography
+
+- Feature Engineering using `tsfresh`:
+    - Pycon:DE 2017: "Get rich or die ... overfiting":
+        - https://www.youtube.com/watch?v=Fm8zcOMJ-9E&ab_channel=PyConDE
+    - tsfresh documentation: 
+        - https://tsfresh.readthedocs.io/en/latest/
 
 - Oversampling technique `SMOTE` original paper:
     - https://arxiv.org/abs/1106.1813

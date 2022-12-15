@@ -87,6 +87,8 @@ full_data_df[cols_to_norm] = full_data_df[cols_to_norm].apply(lambda x: (x - x.m
 full_data_df.head()
 ```
 
+- All of the claning steps were implemented using pipelines within the pandas framework (see notebooks).
+
 #### Data splits, tried the following:
 
 1. Split 80% for train and 20% for test. A sort of training \"cross-validation\" can be considered intrinsically incorporated when using Random Forest with a number of estimator larger than one (the default is $100$). To split the data we used:
@@ -126,12 +128,12 @@ from sklearn.model_selection import train_test_split
 
 | Metric \ Model    | Random forest from Helper FE   | Random forest from tsfresh FE (pv=0.68)    | KNN from tsfresh    | NN from tsfresh   |
 |---------------- | --------------- | --------------- | --------------- | --------------- |
-| Precision for not valid class    | 0.79    | 0.84    | Item4.1    | Item5.1   |
-| Precision for the valid class   | 0.81   | 0.89   | Item4.2   | Item5.2   |
-| Recall valid for not valid class    | 0.87    | 0.81    | Item4.1    | Item5.1   |
-| Recall for the valid class   | 0.79   | 0.86   | Item4.2   | Item5.2   |
-| F1-score for not valid class    | 0.80    | 0.86    | Item4.1    | Item5.1   |
-| F1-score for the valid class   | 0.80   | 0.87   | Item4.2   | Item5.2   |
+| Precision for not valid class    | 0.79    | 0.84    | 0.74    | Item5.1   |
+| Precision for the valid class   | 0.81   | 0.89   | 0.81   | Item5.2   |
+| Recall valid for not valid class    | 0.87    | 0.81    | 0.64    | Item5.1   |
+| Recall for the valid class   | 0.79   | 0.86   | 0.88   | Item5.2   |
+| F1-score for not valid class    | 0.80    | 0.86    | 0.72    | Item5.1   |
+| F1-score for the valid class   | 0.80   | 0.87   | 0.80   | Item5.2   |
 
 
 ### Conclusions
@@ -150,16 +152,28 @@ from sklearn.model_selection import train_test_split
 - So far we have a good `f1-score` for both the minority and majority classes with values above $80$%.
 - We can clearly identified two regions when feature engineering one related to the under fitting region when `p-values` when using the `tfresh`. One region corresponds to the under-fitting region ($p-value < 0.48$), meaning we have less features (52% or more are considered rare features and therefore ignored). The other region corresponds to the over-fitting region with $p-value > 0.48$ (52% or less are considered rare features and therefore ignored.)
 
+#### Avoiding Overfitting
+
+- We tried to control the number of engineered features used to reduce the complexity of the model and therefore reducing overfiting. The `p-value` that generated the best score with a lower number of features should be used for this case.
+
+- Cross-validation can also help with overfitting. This was implemented whenever we performed a GridSearch, the default for this particular case of `cv=None` implies $5-fold$ cross-validation.
+
 #### Explainability
 
 - During the feature engineering process `p-value` tuning allows to detect high correlated features in a dataset. If one selects purposely a dataset with the lower p-value and higher performance, one can more easily extract insights that could become relevant for the manufacturing process of the bins in question or the injection moulding in question.
 
 - The dataset with `p-value=0.01` has the lowest amount of features and quite high precision (above $80%$). Those features include mostly some Fourier transform coefficients, among others parameters. Meaning that highly localized points in the configuration space of the features are the most relevant to make the distinction between a valid and not valid classes. Tracking those parameters could also give insight of what features are the most important when engineering the studied bins.
 
-- TODO:
-    - Obtain optimal `p-values` when using other ML methods.
+#### Reproducibility
 
+- Whenever we split the data between training and test we used a `random_state=0`.
+- For the `RandomForestClassifier` we used `random_state=123`, whenever bootstrapping was involved.
+- The balancing of the data using the `SMOTE` library also required some `random_state`. We avoided this issue by saving the datasets after balancing them and the using those for training.
+- To create the conda environment used for this case use:
 
+```bash
+conda env create --file ai4im.yml
+```
 
 ### Bibliography
 
